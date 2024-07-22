@@ -1,0 +1,203 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Rhapsody Calculator</title>
+    <style>
+      body {
+        font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+        background-color: #faf3e0;
+        color: #333;
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+        padding: 20px;
+      }
+
+      .calculator-container {
+          background: #ffffff;
+          padding: 25px;
+          border-radius: 15px;
+          box-shadow: 0 8px 16px rgba(0, 0, 0, 0.1);
+          max-width: 600px;
+          width: 100%;
+          border: 1px solid #ddd;
+      }
+
+      .calculator-container h1 {
+          margin-bottom: 20px;
+          color: #6a1b9a;
+          text-align: center;
+      }
+
+      .question {
+          margin-bottom: 20px;
+      }
+
+      .question label {
+          display: block;
+          margin-bottom: 10px;
+          font-weight: bold;
+          color: #6a1b9a;
+      }
+
+      .question input[type="radio"] {
+          margin-right: 10px;
+      }
+
+      .question input[type="number"],
+      .question input[type="range"] {
+          width: calc(100% - 20px);
+          margin-top: 10px;
+          border: 1px solid #ddd;
+          border-radius: 5px;
+          padding: 5px;
+      }
+
+      .question input[type="range"] {
+          margin-bottom: 10px;
+      }
+
+      .result-display {
+          font-size: 1.5em;
+          margin-top: 20px;
+          color: #6a1b9a;
+          text-align: left;
+      }
+
+      button {
+          background-color: #6a1b9a;
+          color: white;
+          border: none;
+          padding: 10px 20px;
+          margin: 10px;
+          border-radius: 25px;
+          cursor: pointer;
+          transition: background-color 0.3s;
+      }
+      
+      button:hover {
+          background-color: #5e1185;
+      }
+
+      .error {
+          color: red;
+          margin-top: 10px;
+          text-align: center;
+      }
+
+      input[type="checkbox"] {
+          margin-left: 10px;
+      }
+    </style>
+  </head>
+  <body>
+    <div class="calculator-container">
+      <h1>LOTR Calculator by Eduard Herasym</h1>
+        
+      <div class="question" id="quiz1">
+        <label>1: Distance from the Shire to Mordor:</label>
+        <input type="radio" name="quiz1" value="18" required> 1815 miles<br>
+        <input type="radio" name="quiz1" value="14"> 1456 miles<br>
+        <input type="radio" name="quiz1" value="17"> 1779 miles
+      </div>
+
+      <div class="question" id="quiz2">
+        <label>2: Select a realm you would visit:</label>
+        <input type="radio" name="quiz2" value="8"> Rivendell<br>
+        <input type="radio" name="quiz2" value="16"> Gondor<br>
+        <input type="radio" name="quiz2" value="24"> The Shire
+      </div>
+
+      <div class="question" id="quiz3">
+        <label>3: Pick a weapon:</label>
+        <input type="radio" name="quiz3" value="5"> Sting<br>
+        <input type="radio" name="quiz3" value="10"> Anduril<br>
+        <input type="radio" name="quiz3" value="15"> Bow of the Galadhrim
+      </div>
+
+      <div class="question" id="quiz4">
+        <label>4: Choose your favourite character</label>
+        <input type="radio" name="quiz4" value="30"> Gimli<br>
+        <input type="radio" name="quiz4" value="50"> Gandalf<br>
+        <input type="radio" name="quiz4" value="35"> Frodo<br>
+        <input type="radio" name="quiz4" value="45"> Aragorn
+      </div>
+
+      <div class="question" id="numericQuestion">
+          <label>Rate "The Lord of the Rings" from 0 to 99:</label>
+          <input type="number" id="numInput" min="0" max="99" value="0">
+          <input type="range" id="numSlider" min="0" max="99" value="0">
+      </div>
+
+      <div class="question">
+          <label>If You click on the button an extra calculation will happen:</label>
+          <input type="checkbox" id="extraComputation"> Go extra
+      </div>
+
+      <div>
+          <button onclick="computeResult()">Compute</button>
+          <button onclick="resetAll()">Reset</button>
+      </div>
+
+      <div class="result-display" id="finalResult">Result: </div>
+      <div class="error" id="error"></div>
+    </div>
+
+    <script>
+        document.getElementById('numInput').addEventListener('input', function() {
+            document.getElementById('numSlider').value = this.value;
+        });
+
+        document.getElementById('numSlider').addEventListener('input', function() {
+            document.getElementById('numInput').value = this.value;
+        });
+
+        function getRandomFactor() {
+            return Math.floor(Math.random() * 50) + 1;
+        }
+
+        function computeResult() {
+            let q1 = document.querySelector('input[name="quiz1"]:checked');
+            let q2 = document.querySelector('input[name="quiz2"]:checked');
+            let q3 = document.querySelector('input[name="quiz3"]:checked');
+            let q4 = document.querySelector('input[name="quiz4"]:checked');
+
+            let num = parseInt(document.getElementById('numInput').value);
+            let extra = document.getElementById('extraComputation').checked;
+            let errorDiv = document.getElementById('error');
+
+            if (!q1 || !q2 || !q3 || !q4) {
+              errorDiv.innerText = "Please answer all the questions.";
+              return;
+            }
+
+            errorDiv.innerText = "";
+
+            let randomFactor = getRandomFactor();
+            let result = 0;
+
+            if (q1) result += parseInt(q1.value);
+            if (q2) result += parseInt(q2.value);
+            if (q3) result += parseInt(q3.value);
+            if (q4) result += parseInt(q4.value);
+
+            result += num;
+            if (extra) result += 30;
+            result += randomFactor;
+
+            document.getElementById('finalResult').innerText = 'Result: ' + result;
+        }
+
+        function resetAll() {
+            document.querySelectorAll('input[type="radio"]').forEach(radio => radio.checked = false);
+            document.getElementById('numInput').value = 0;
+            document.getElementById('numSlider').value = 0;
+            document.getElementById('extraComputation').checked = false;
+            document.getElementById('finalResult').innerText = 'Result: ';
+            document.getElementById('error').innerText = '';
+        }
+    </script>
+  </body>
+</html>
