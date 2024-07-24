@@ -18,3 +18,5 @@ This page is an interactive calculator themed around "The Lord of the Rings" (LO
 3. **Toggle Extra Computation**: Check or uncheck the box to include or exclude the additional computation.
 4. **Compute the Result**: Click the "Compute" button to see the final result.
 5. **Reset**: Click the "Reset" button to clear all inputs and start over.
+
+## Demo: https://edkido.github.io/rhapsody_LOTR/
